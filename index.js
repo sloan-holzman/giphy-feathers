@@ -1,6 +1,7 @@
 const feathers = require('@feathersjs/feathers');
 const express = require('@feathersjs/express');
 const mongoose = require("./db/schema.js")
+const cors = require('cors')
 const Model = require("./db/schema").Gif;
 // const socketio = require('@feathersjs/socketio');
 const service = require('feathers-mongoose');
@@ -20,11 +21,15 @@ app.configure(express.rest());
 // Set up an error handler that gives us nicer errors
 app.use(express.errorHandler());
 
-Model.remove({})
-  .then(() => {
-    console.log("Users removed successfully!");
-    // process.exit()
-  })
+var corsOption = {
+  // note to self: need to whitelist origins.  right now it is open to all
+  origin: "*",
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true
+  // exposedHeaders: ['x-auth-token']
+};
+
+app.use(cors(corsOption));
 
 // const mongoose = require('mongoose');
 // const Model = require('./message-model');
