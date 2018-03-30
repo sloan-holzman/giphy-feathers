@@ -47,21 +47,21 @@ app.use(cors(corsOption));
 app.use('/gifs', service({
   Model,
   lean: true, // set to false if you want Mongoose documents returned
-  paginate: {
-    default: 2,
-    max: 4
-  }
+  // paginate: {
+  //   default: 2,
+  //   max: 4
+  // }
 }));
 app.use(express.errorHandler());
 
 // Create a dummy gif
-app.service('gifs').create({
-  title: 'excited andre 3000 GIF',
-  imgUrl: 'https://media0.giphy.com/media/Y9xWFbTw37F8Q/giphy-downsized.gif',
-  id: 'Y9xWFbTw37F8Q'
-}).then(function(gif) {
-  console.log('Created gif', gif);
-});
+// app.service('gifs').create({
+//   title: 'excited andre 3000 GIF',
+//   imgUrl: 'https://media0.giphy.com/media/Y9xWFbTw37F8Q/giphy-downsized.gif',
+//   id: 'Y9xWFbTw37F8Q'
+// }).then(function(gif) {
+//   console.log('Created gif', gif);
+// });
 
 // Start the server.
 const port = 3030;
