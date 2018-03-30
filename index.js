@@ -42,8 +42,60 @@ app.use(cors(corsOption));
 // Enable Socket.io services
 // app.configure(socketio());
 
+const myService = {
+  async find() {
+    let foundGifs = await Model.find({}, function(err, gifs) {
+      if (err) {
+        return err
+      } else {
+        return gifs
+      }
+    })
+    return foundGifs
+  },
+  async get(id, params) {},
+  async create(data, params) {
+    let revenueValue = await Model.findOne({
+      'id': data.id
+    }, function(err, gif) {
+      if (!gif) {
+        let newGif = new Model(data);
+        newGif.save(function(error, saveGif) {
+          if (error) {
+            console.log("error!")
+            return error;
+          }
+          console.log(saveGif)
+          return saveGif;
+        });
+      } else {
+        return gif
+      }
+    });
+    console.log(returnValue)
+    return {data: returnValue, status: 200}
 
-// Connect to the db, create and register a Feathers service.
+  },
+  async update(id, data, params) {},
+  async patch(id, data, params) {},
+  async remove(id, params) {
+    console.log(id)
+    let foundGif = await Model.remove({_id: id}, function(err, gif) {
+      if (err) {
+        return err
+      } else {
+        return gif
+      }
+    })
+    return foundGif
+  }
+}
+
+// testing replacement
+// app.use('/gifs', myService)
+
+
+// works - Connect to the db, create and register a Feathers service.
 app.use('/gifs', service({
   Model,
   lean: true, // set to false if you want Mongoose documents returned
@@ -52,6 +104,19 @@ app.use('/gifs', service({
   //   max: 4
   // }
 }));
+
+// a hook to capitalize the titles
+app.service('/gifs').hooks({
+  before: {
+    create: async context => {
+      let titleCopy = context.data.title
+      context.data.title = titleCopy.toUpperCase()
+      return context;
+    }
+  }
+});
+
+
 app.use(express.errorHandler());
 
 // Create a dummy gif
